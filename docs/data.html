@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Data · Cable Turf</title>
+<meta name="description" content="Where Cable Turf's claims and franchise lines come from, how a block gets its turf, and what the map leaves out.">
+<link rel="canonical" href="https://cableturf.publicworks.nyc/data.html">
+<meta property="og:title" content="Data · Cable Turf">
+<meta property="og:description" content="Where Cable Turf's claims and franchise lines come from, how a block gets its turf, and what the map leaves out.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fbfaf7">
+<link rel="stylesheet" href="css/site.css?v=20261017b">
+<script src="js/site.js?v=20261017b" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the page</a>
+<header data-chrome="masthead"></header>
+
+<main id="main" class="wrap document">
+  <h1>Data</h1>
+  <p class="lead">Where the claims and the franchise lines come from, how a block gets its turf, and what the map leaves out.</p>
+
+  <h2 id="downloads">Downloads</h2>
+  <div class="downloads">
+    <a class="download" href="data/cable-turf-blocks.csv" download>
+      <h3>Blocks (CSV)</h3>
+      <p>One row per Census block with buildings: its turf, its franchise area and how many buildings each rival claims.</p>
+    </a>
+    <a class="download" href="data/meta.json" download>
+      <h3>Summary (JSON)</h3>
+      <p>The figures on this page, with borough totals, the build date and the sources.</p>
+    </a>
+  </div>
+  <details class="columns">
+    <summary>Columns</summary>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>block</code></td><td>2020 Census block, 15-digit GEOID</td></tr>
+          <tr><td><code>borough</code></td><td>Borough name</td></tr>
+          <tr><td><code>cable_turf</code></td><td>S Spectrum, O Optimum, B both reach, A Astound only, N no cable company claims home service</td></tr>
+          <tr><td><code>franchise</code></td><td>The block's holder on the City's franchise map: S for Time Warner, now Spectrum, and O for Cablevision, now Optimum. Blank where the block's center falls outside every area.</td></tr>
+          <tr><td><code>locations</code></td><td>FCC locations on the block where any company claims home service, one per building</td></tr>
+          <tr><td><code>verizon_fiber</code></td><td>Locations where Verizon claims fiber service</td></tr>
+          <tr><td><code>astound</code></td><td>Locations where Astound claims cable or fiber service</td></tr>
+          <tr><td><code>cable_only_min</code></td><td>Locations no rival claims, at least: <code>locations</code> minus <code>verizon_fiber</code> minus <code>astound</code>, never below zero</td></tr>
+          <tr><td><code>wireless</code></td><td>Wireless home internet providers reported on the block, separated by semicolons</td></tr>
+        </tbody>
+      </table>
+      <p class="fine">The summary's <code>city</code> and <code>boroughs</code> entries hold the same counts, added up. Percentages are shares of locations, and <code>no_verizon_fiber</code> is the locations less those Verizon claims fiber at.</p>
+    </div>
+  </details>
+  <p class="data-note">Compiled data can be reused with attribution. Cite Cable Turf (publicworks.nyc) and the FCC's December 2025 reporting period.</p>
+  <p class="data-note" id="built">&nbsp;</p>
+
+  <h2 id="sources">Sources</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Source</th><th>Used for</th><th>Period</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href="https://broadbandmap.fcc.gov/data-download">Broadband Data Collection</a>, Federal Communications Commission, fixed availability files for New York</td>
+          <td>Companies and the buildings where each claims home service, by block</td>
+          <td>December 2025, files updated 13 October 2026</td>
+        </tr>
+        <tr>
+          <td><a href="https://data.cityofnewyork.us/d/wmsu-5muw">2020 Census Blocks</a> (wmsu-5muw), NYC Department of City Planning</td>
+          <td>Block shapes, clipped to the shoreline</td>
+          <td>2020 Census</td>
+        </tr>
+        <tr>
+          <td><a href="https://data.cityofnewyork.us/d/n2h8-q6ag">Cable Franchise Areas</a> (n2h8-q6ag), NYC Office of Technology and Innovation</td>
+          <td>Each block's franchise holder, the franchise line, and the city outline that trims map labels</td>
+          <td>Published November 2016</td>
+        </tr>
+        <tr>
+          <td><a href="https://data.cityofnewyork.us/d/9nt8-h7nd">2020 Neighborhood Tabulation Areas</a> (9nt8-h7nd), NYC Department of City Planning</td>
+          <td>The neighborhood named in each block's readout</td>
+          <td>2020</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="process">Process</h2>
+  <ol class="process">
+    <li><h3>Collect</h3><p>We download the FCC's December 2025 availability files for New York, for cable, fiber and licensed fixed wireless. We also download NYC Planning's 2020 Census blocks and the City's franchise map.</p></li>
+    <li><h3>Match</h3><p>We count the buildings each company claims in every block and join the counts to block shapes by their 15-digit block ID. Each block takes the franchise area and the neighborhood that hold its center.</p></li>
+    <li><h3>Check</h3><p>We keep the companies that sell wired home service: Spectrum and Optimum cable, Astound, and Verizon fiber. Only claims of home service count, so a building where every claim is business-only drops out. Spectrum's and Optimum's own fiber counts with their cable. Wireless home internet stays in the block file and never counts as a wire.</p></li>
+    <li><h3>Calculate</h3><p>A block is one company's turf when only that company reports cable there, or when it reports at least four times the other's buildings. Otherwise both reach it. Buildings with only the cable company are the block's buildings less those Verizon and Astound claim. The map colors each block by its cable company and hatches it where neither Verizon nor Astound claims any of its buildings. The Other options view shades each block by the share of its buildings that neither claims. A block with fewer than one building per two hectares is drawn as open land, with no company color or hatch. Those blocks are mostly parks, airports and cemeteries; they hold 0.2% of buildings and nearly a third of the land.</p></li>
+    <li><h3>Publish</h3><p>We simplify block shapes to about 2.5 meters and write the map file, the CSV and the summary.</p></li>
+  </ol>
+
+  <h2 id="turf">Turf</h2>
+  <p>Where one company holds a block, it is the company the City's franchise map names at <span data-meta="city.franchise_match_pct">99.97%</span> of buildings. Most of the <span data-meta="city.franchise_mismatch">233</span> exceptions are in Marble Hill, which belongs to Manhattan but sits on the mainland beside the Bronx. The franchise map draws it with the Bronx, and Spectrum, Manhattan's franchisee, reports serving it.</p>
+  <p>About <span data-meta="city.both_reach_pct">1.1%</span> of buildings sit on blocks both companies reach, and <span data-meta="city.both_reach_near_line_pct">82%</span> of those are within 500 meters of the franchise line.</p>
+
+  <h2 id="fiber">Fiber</h2>
+  <p>When the City granted Verizon its citywide cable franchise in 2008, Verizon promised Fios to every household by 30 June 2014, under the <a href="https://www.nyc.gov/assets/oti/downloads/pdf/cable-tv-franchises/verizon-nyc-franchise-agreement-fcrc-approved.pdf">franchise agreement</a>. In the FCC's December 2025 data, Verizon claims fiber at <span data-meta="city.verizon_fiber_pct">86.5%</span> of the city's buildings and none at <span data-meta="city.no_verizon_fiber">109,400</span>.</p>
+  <p>Reports cover the City's <a href="https://fierce-network.com/telecom/new-york-city-audit-says-verizon-failed-to-deliver-fios-promise">2015 audit</a>, its <a href="https://www.cbsnews.com/amp/newyork/news/nyc-verizon-fios-lawsuit">2017 suit</a> and the <a href="https://www.benton.org/headlines/mayor-de-blasio-holds-verizon-accoubtable-connect-half-million-new-york-city-households">2020 settlement</a>. Verizon's position in the suit was that the dispute turned on what counts as a "passed" home.</p>
+
+  <h2 id="limits">Limits</h2>
+  <ul>
+    <li>A location is a building, so a tower with hundreds of apartments counts once, the same as a house. Queens and Staten Island hold more than half the city's buildings, so citywide shares lean toward houses.</li>
+    <li>Companies report the buildings where they say they could install service within 10 business days. The FCC doesn't check each claim, and anyone can challenge a listing on the FCC's map.</li>
+    <li>Only claims of home service count. A building where every claim is business-only drops out. On a few mostly commercial blocks, Verizon claims home service and the cable company claims only business service, so the map shows no cable company there.</li>
+    <li>The map shows blocks. Buildings on the same block, or across the street, can have different options.</li>
+    <li>Verizon's promise counted households, and the FCC counts buildings. The buildings without a fiber claim aren't a count of households still waiting.</li>
+    <li>The franchise map dates from 2016 and names Time Warner and Cablevision. Each block takes the area that holds its center, so a block cut by the line goes to one side.</li>
+    <li>Wireless records don't say what technology they use. The block file lists them, and the map never counts them as a wire.</li>
+    <li>A blank is never a zero. A block with no reported buildings, or very few for its size, is shown in gray.</li>
+  </ul>
+</main>
+
+<footer data-chrome="footer"></footer>
+</body>
+</html>

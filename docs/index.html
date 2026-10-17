@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Cable Turf</title>
+<meta name="description" content="Why most New Yorkers can't choose their cable company: a short story about the City's franchise lines, then a block-by-block map.">
+<link rel="canonical" href="https://cableturf.publicworks.nyc/">
+<meta property="og:title" content="Cable Turf">
+<meta property="og:description" content="Why most New Yorkers can't choose their cable company: a short story about the City's franchise lines, then a block-by-block map.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fbfaf7">
+<link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="css/site.css?v=20261017b">
+<script src="js/site.js?v=20261017b" defer></script>
+<script src="vendor/maplibre-gl.js" defer></script>
+<script src="js/map.js?v=20261017b" defer></script>
+</head>
+<body class="app-page">
+<a class="skip" href="#story">Skip to the story</a>
+<a class="skip" href="#find">Skip to the map</a>
+<header data-chrome="masthead"></header>
+
+<!-- One pinned map, five steps beside it. The stage comes first so it can
+     stick to the top on a phone; on a wide screen it sits on the right. -->
+<main id="main" class="story">
+  <div class="story-stage" id="stage">
+    <section class="map" id="map"
+      aria-label="Map of each Census block's cable company. Each step of the story moves it, and the text states the same findings."></section>
+    <div class="map-message" id="map-message" role="status">Drawing the franchise lines…</div>
+    <div class="map-tip" id="tip" hidden></div>
+  </div>
+
+  <div class="story-text" id="story">
+
+    <section class="step" data-step="0">
+      <p class="step-count">1 of 5</p>
+      <h1>Which cable company is on your block?</h1>
+      <p class="figure"><span class="num" data-meta="city.one_company_turf_pct">99%</span><span class="cap">of buildings have one cable company, set by City franchise</span></p>
+      <p>At almost every building in New York City, either Spectrum or Optimum <a href="https://broadbandmap.fcc.gov/data-download" target="_blank" rel="noopener">claims service</a>, and not both. Which one depends on a line the City drew, dashed on the map.</p>
+      <p class="step-skip"><a href="#find">Skip to the map ↓</a></p>
+    </section>
+
+    <section class="step" data-step="1">
+      <p class="step-count">2 of 5</p>
+      <h2>The City drew the lines</h2>
+      <p>A City <a href="https://www.nyc.gov/content/oti/pages/franchises" target="_blank" rel="noopener">franchise</a> lets a company put wires on, over and under City streets. <a href="https://www.law.cornell.edu/uscode/text/47/541" target="_blank" rel="noopener">Federal law</a> bars exclusive ones, yet the City's <a href="https://data.cityofnewyork.us/d/n2h8-q6ag" target="_blank" rel="noopener">franchise map</a> gives each area one cable company. Where a block has one cable company, it is the one that map names at <span data-meta="city.franchise_match_pct">99.97%</span> of buildings.</p>
+      <p>Some lines are decades old. In 1970 the City <a href="https://movingimagesource.us/articles/out-of-the-vast-wasteland-20090618" target="_blank" rel="noopener">split Manhattan</a> between two cable companies, and a <a href="https://www.villagevoice.com/dirty-words-on-the-boob-tube-cable-tv-in-1971-presaged-our-current-age-of-babble-on/" target="_blank" rel="noopener">notice the next year</a> put the line at East 86th and West 79th Streets. Spectrum still holds <a href="https://www.nyc.gov/content/oti/pages/franchises/cable-tv-franchises" target="_blank" rel="noopener">a separate franchise</a> for each side.</p>
+      <p>The line is the only place the two companies meet. About <span data-meta="city.both_reach_pct">1.1%</span> of buildings sit on blocks both reach, shown in purple, and <a href="data.html#turf"><span data-meta="city.both_reach_near_line_pct">82%</span> of those</a> are within 500 meters of the line.</p>
+    </section>
+
+    <section class="step" data-step="2">
+      <p class="step-count">3 of 5</p>
+      <h2>The second network fell short</h2>
+      <p>In its 2008 <a href="https://www.nyc.gov/assets/oti/downloads/pdf/cable-tv-franchises/verizon-nyc-franchise-agreement-fcrc-approved.pdf" target="_blank" rel="noopener">citywide franchise</a>, Verizon promised Fios to every household by 30 June 2014. A <a href="https://www.fierce-network.com/telecom/new-york-city-audit-says-verizon-failed-to-deliver-fios-promise" target="_blank" rel="noopener">City audit</a> in 2015 found Fios ran past 2.2 million of an estimated 3.3 million households. The City <a href="https://www.cbsnews.com/amp/newyork/news/nyc-verizon-fios-lawsuit" target="_blank" rel="noopener">sued</a> in 2017, and in a <a href="https://www.benton.org/headlines/mayor-de-blasio-holds-verizon-accoubtable-connect-half-million-new-york-city-households" target="_blank" rel="noopener">2020 settlement</a> Verizon agreed to reach 500,000 more households and every NYCHA building.</p>
+      <p>Today Verizon <a href="https://broadbandmap.fcc.gov/data-download" target="_blank" rel="noopener">claims fiber</a> at <span data-meta="city.verizon_fiber_pct">87%</span> of the city's buildings, but the gaps are not spread evenly. In northern Harlem, at least <span data-meta="story.one_wire_floor_pct">74%</span> of buildings have neither Verizon fiber nor Astound claimed.</p>
+      <div class="step-key">
+        <p class="key-ramp-label">Share of a block's buildings with no Verizon fiber or Astound claimed</p>
+        <div class="key-ramp"><span class="ramp-bar"></span><span class="ramp-ends"><span>None</span><span>All</span></span></div>
+      </div>
+    </section>
+
+    <section class="step" data-step="3">
+      <p class="step-count">4 of 5</p>
+      <h2>Expired, and up for renewal</h2>
+      <p>Optimum's <a href="https://www.nyc.gov/assets/mocs/downloads/Opportunities/FCRC/agendas/may/2016/FCRC_Public_Meeting_Documents-5-11-16.pdf" target="_blank" rel="noopener">agreements</a> for the Bronx and Brooklyn expired on 18 July 2020. At the end of 2024, Altice, Optimum's owner, <a href="https://www.sec.gov/Archives/edgar/data/1702780/000162828025005486/atus-20241231.htm" target="_blank" rel="noopener">told investors</a> the franchise was still expired and that it was operating under temporary state authority.</p>
+      <p>A renewal is when the City can set new terms. Cities "often demand concessions or other commitments as a condition to renewal," Altice said in the same filing.</p>
+    </section>
+
+    <section class="step step-live" data-step="4" id="find" tabindex="-1">
+      <div id="city">
+        <p class="step-count">5 of 5</p>
+        <h2>Find your block</h2>
+        <p>Drag and zoom the map, then tap a block for its cable company, its other options and who let them in.</p>
+        <div class="seg" id="view" role="group" aria-label="Map view">
+          <button type="button" data-view="holder" aria-pressed="true">Cable company</button>
+          <button type="button" data-view="wire" aria-pressed="false">Other options</button>
+        </div>
+        <section class="readout">
+          <div data-key="holder">
+            <p class="key-line">
+              <span><span class="swatch spectrum"></span>Spectrum</span>
+              <span><span class="swatch optimum"></span>Optimum</span>
+              <span><span class="swatch both"></span>Both</span>
+              <span><span class="swatch open"></span>Neither, or open land</span>
+            </p>
+            <p class="key-line"><span><span class="swatch hatch"></span>No Verizon fiber or Astound claimed</span></p>
+          </div>
+          <div data-key="wire" hidden>
+            <p class="key-ramp-label">Share of a block's buildings with no Verizon fiber or Astound claimed</p>
+            <div class="key-ramp"><span class="ramp-bar"></span><span class="ramp-ends"><span>None</span><span>All</span></span></div>
+            <p class="key-line"><span><span class="swatch open"></span>Neither cable company, or open land</span></p>
+          </div>
+          <p class="key-line"><span><span class="swatch line"></span>Franchise line on the City's map</span></p>
+        </section>
+        <section class="readout">
+          <h3 class="section-h">See a block</h3>
+          <div class="chips" id="samples">
+            <button type="button" class="chip" data-sample="0">Bay Ridge</button>
+            <button type="button" class="chip" data-sample="1">Clinton Hill</button>
+            <button type="button" class="chip" data-sample="2">Marble Hill</button>
+            <button type="button" class="chip" data-sample="3">Murray Hill</button>
+            <button type="button" class="chip" data-sample="4">Co-op City</button>
+          </div>
+        </section>
+      </div>
+      <div id="block" hidden></div>
+
+      <footer data-chrome="footer" data-compact></footer>
+    </section>
+
+  </div>
+  <noscript>
+    <p class="wrap">The map needs JavaScript. The story above reads without it, and the <a href="data.html">Data page</a> has the files and the method.</p>
+  </noscript>
+</main>
+</body>
+</html>

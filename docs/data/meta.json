@@ -1,0 +1,103 @@
+{
+ "built": "2026-10-17",
+ "source_period": "December 2025",
+ "source": "FCC Broadband Data Collection, fixed availability files for New York",
+ "residential_only": true,
+ "geometry": "NYC Planning 2020 Census Blocks, https://data.cityofnewyork.us/d/wmsu-5muw",
+ "franchise": "OTI Cable Franchise Areas, 2016, https://data.cityofnewyork.us/d/n2h8-q6ag",
+ "places": "NYC Planning 2020 Neighborhood Tabulation Areas, https://data.cityofnewyork.us/d/9nt8-h7nd",
+ "city": {
+  "locations": 811304,
+  "one_company_turf_pct": 98.6,
+  "both_reach_pct": 1.1,
+  "both_reach_near_line_pct": 82,
+  "verizon_fiber_pct": 86.5,
+  "no_verizon_fiber": 109400,
+  "astound_pct": 7.9,
+  "one_wire_floor": 90055,
+  "one_wire_floor_pct": 11.1,
+  "franchise_mismatch": 233,
+  "franchise_match_pct": 99.97
+ },
+ "boroughs": {
+  "Bronx": {
+   "locations": 85036,
+   "one_company_turf_pct": 98.6,
+   "both_reach_pct": 1.2,
+   "both_reach_near_line_pct": 0,
+   "verizon_fiber_pct": 84.6,
+   "no_verizon_fiber": 13063,
+   "astound_pct": 0.3,
+   "one_wire_floor": 12926,
+   "one_wire_floor_pct": 15.2,
+   "franchise_mismatch": 8,
+   "franchise_match_pct": 99.99
+  },
+  "Brooklyn": {
+   "locations": 262791,
+   "one_company_turf_pct": 96.9,
+   "both_reach_pct": 2.7,
+   "both_reach_near_line_pct": 100,
+   "verizon_fiber_pct": 82.9,
+   "no_verizon_fiber": 44938,
+   "astound_pct": 0.2,
+   "one_wire_floor": 44619,
+   "one_wire_floor_pct": 16.9,
+   "franchise_mismatch": 48,
+   "franchise_match_pct": 99.98
+  },
+  "Manhattan": {
+   "locations": 38181,
+   "one_company_turf_pct": 99.4,
+   "both_reach_pct": 0.1,
+   "both_reach_near_line_pct": 0,
+   "verizon_fiber_pct": 35.0,
+   "no_verizon_fiber": 24833,
+   "astound_pct": 44.7,
+   "one_wire_floor": 12188,
+   "one_wire_floor_pct": 31.9,
+   "franchise_mismatch": 176,
+   "franchise_match_pct": 99.54
+  },
+  "Queens": {
+   "locations": 309052,
+   "one_company_turf_pct": 99.5,
+   "both_reach_pct": 0.3,
+   "both_reach_near_line_pct": 38,
+   "verizon_fiber_pct": 92.7,
+   "no_verizon_fiber": 22643,
+   "astound_pct": 14.9,
+   "one_wire_floor": 16399,
+   "one_wire_floor_pct": 5.3,
+   "franchise_mismatch": 1,
+   "franchise_match_pct": 100.0
+  },
+  "Staten Island": {
+   "locations": 116244,
+   "one_company_turf_pct": 99.9,
+   "both_reach_pct": 0.0,
+   "both_reach_near_line_pct": null,
+   "verizon_fiber_pct": 96.6,
+   "no_verizon_fiber": 3923,
+   "astound_pct": 0.0,
+   "one_wire_floor": 3923,
+   "one_wire_floor_pct": 3.3,
+   "franchise_mismatch": 0,
+   "franchise_match_pct": 100.0
+  }
+ },
+ "story": {
+  "place": "Harlem (North)",
+  "locations": 2153,
+  "one_company_turf_pct": 99.9,
+  "both_reach_pct": 0.0,
+  "both_reach_near_line_pct": null,
+  "verizon_fiber_pct": 22.1,
+  "no_verizon_fiber": 1677,
+  "astound_pct": 3.9,
+  "one_wire_floor": 1603,
+  "one_wire_floor_pct": 74.4,
+  "franchise_mismatch": 0,
+  "franchise_match_pct": 100.0
+ }
+}
