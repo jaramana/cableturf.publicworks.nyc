@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>About · Cable Turf</title>
 <meta name="description" content="Why Cable Turf maps New York City's cable turf, what it covers and how it was built.">
 <link rel="canonical" href="https://cableturf.publicworks.nyc/about.html">
@@ -11,8 +12,8 @@
 <meta property="og:description" content="Why Cable Turf maps New York City's cable turf, what it covers and how it was built.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#fbfaf7">
-<link rel="stylesheet" href="css/site.css?v=20261017b">
-<script src="js/site.js?v=20261017b" defer></script>
+<link rel="stylesheet" href="css/site.css?v=20261101">
+<script src="js/site.js?v=20261101" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the page</a>
@@ -29,7 +30,7 @@
   <p>The map covers the five boroughs and wired home internet: cable from Spectrum, Optimum and Astound, and fiber from Verizon. It doesn't count wireless or satellite service, and lists no prices, plans or speeds. Its figures are what the companies tell the FCC they could serve, by Census block, counted by building, not by home. The <a href="data.html">Data page</a> has the sources, method and limits.</p>
 
   <h2 id="built">Built</h2>
-  <p>A static website using MapLibre GL JS, with labels from OpenFreeMap tiles. A Python pipeline, using only the standard library, counts the buildings each company claims in every Census block and places each block in its franchise area. The site uses no account system or analytics.</p>
+  <p>Python's standard library counts the buildings each company claims in every Census block and places each block in its franchise area. The website uses static HTML, CSS and JavaScript, served from GitHub Pages, with MapLibre GL JS and labels from OpenFreeMap tiles. The site uses no account system or analytics.</p>
 
   <h2 id="independence">Independence</h2>
   <p>No agency reviewed this site.</p>
@@ -38,10 +39,10 @@
   <p>Data from the Federal Communications Commission's Broadband Data Collection, from NYC Planning and from the NYC Office of Technology and Innovation. Claude was used in development. Map data from OpenStreetMap contributors, with tiles from OpenFreeMap.</p>
 
   <h2 id="reuse">Reuse</h2>
-  <p>Code is BSD 3-Clause licensed. Compiled data can be reused with attribution; the source data retain their own terms. Carry the reporting period, December 2025, and note that the figures are the companies' own claims. The downloads are on the <a href="data.html">Data page</a>.</p>
+  <p>Code is BSD 3-Clause licensed. Compiled data can be reused with attribution; the source data retain their own terms. Carry the reporting period, December 2025, when republishing a figure, and note that the figures are the companies' own claims. The downloads are on the <a href="data.html">Data page</a>.</p>
 
   <h2 id="contact">Contact</h2>
-  <p>Report an issue on the <a href="https://github.com/jaramana/cableturf.publicworks.nyc/issues">issue tracker</a>. For a data issue, name the block or neighborhood, not your address.</p>
+  <p>If you find an error, <a href="https://github.com/jaramana/cableturf.publicworks.nyc/issues">open an issue</a>. For a data issue, name the block or neighborhood, not your address.</p>
 </main>
 
 <footer data-chrome="footer"></footer>

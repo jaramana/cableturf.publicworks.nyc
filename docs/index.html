@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Cable Turf</title>
 <meta name="description" content="Why most New Yorkers can't choose their cable company: a short story about the City's franchise lines, then a block-by-block map.">
 <link rel="canonical" href="https://cableturf.publicworks.nyc/">
@@ -13,10 +14,10 @@
 <meta name="theme-color" content="#fbfaf7">
 <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
 <link rel="stylesheet" href="vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/site.css?v=20261017b">
-<script src="js/site.js?v=20261017b" defer></script>
+<link rel="stylesheet" href="css/site.css?v=20261101">
+<script src="js/site.js?v=20261101" defer></script>
 <script src="vendor/maplibre-gl.js" defer></script>
-<script src="js/map.js?v=20261017b" defer></script>
+<script src="js/map.js?v=20261101" defer></script>
 </head>
 <body class="app-page">
 <a class="skip" href="#story">Skip to the story</a>
@@ -31,6 +32,8 @@
       aria-label="Map of each Census block's cable company. Each step of the story moves it, and the text states the same findings."></section>
     <div class="map-message" id="map-message" role="status">Drawing the franchise lines…</div>
     <div class="map-tip" id="tip" hidden></div>
+    <div class="map-cursor" aria-hidden="true"></div>
+    <p class="map-keys" aria-hidden="true">Arrow keys move · + and − zoom · Enter opens the block</p>
   </div>
 
   <div class="story-text" id="story">
@@ -48,23 +51,23 @@
       <h2>The City drew the lines</h2>
       <p>A City <a href="https://www.nyc.gov/content/oti/pages/franchises" target="_blank" rel="noopener">franchise</a> lets a company put wires on, over and under City streets. <a href="https://www.law.cornell.edu/uscode/text/47/541" target="_blank" rel="noopener">Federal law</a> bars exclusive ones, yet the City's <a href="https://data.cityofnewyork.us/d/n2h8-q6ag" target="_blank" rel="noopener">franchise map</a> gives each area one cable company. Where a block has one cable company, it is the one that map names at <span data-meta="city.franchise_match_pct">99.97%</span> of buildings.</p>
       <p>Some lines are decades old. In 1970 the City <a href="https://movingimagesource.us/articles/out-of-the-vast-wasteland-20090618" target="_blank" rel="noopener">split Manhattan</a> between two cable companies, and a <a href="https://www.villagevoice.com/dirty-words-on-the-boob-tube-cable-tv-in-1971-presaged-our-current-age-of-babble-on/" target="_blank" rel="noopener">notice the next year</a> put the line at East 86th and West 79th Streets. Spectrum still holds <a href="https://www.nyc.gov/content/oti/pages/franchises/cable-tv-franchises" target="_blank" rel="noopener">a separate franchise</a> for each side.</p>
-      <p>The line is the only place the two companies meet. About <span data-meta="city.both_reach_pct">1.1%</span> of buildings sit on blocks both reach, shown in purple, and <a href="data.html#turf"><span data-meta="city.both_reach_near_line_pct">82%</span> of those</a> are within 500 meters of the line.</p>
+      <p>The two companies meet mostly along the line. About <span data-meta="city.both_reach_pct">1.1%</span> of buildings sit on blocks both reach, shown in purple, and <a href="data.html#turf"><span data-meta="city.both_reach_near_line_pct">82%</span> of those</a> are within 500 meters of the line.</p>
     </section>
 
     <section class="step" data-step="2">
       <p class="step-count">3 of 5</p>
       <h2>The second network fell short</h2>
       <p>In its 2008 <a href="https://www.nyc.gov/assets/oti/downloads/pdf/cable-tv-franchises/verizon-nyc-franchise-agreement-fcrc-approved.pdf" target="_blank" rel="noopener">citywide franchise</a>, Verizon promised Fios to every household by 30 June 2014. A <a href="https://www.fierce-network.com/telecom/new-york-city-audit-says-verizon-failed-to-deliver-fios-promise" target="_blank" rel="noopener">City audit</a> in 2015 found Fios ran past 2.2 million of an estimated 3.3 million households. The City <a href="https://www.cbsnews.com/amp/newyork/news/nyc-verizon-fios-lawsuit" target="_blank" rel="noopener">sued</a> in 2017, and in a <a href="https://www.benton.org/headlines/mayor-de-blasio-holds-verizon-accoubtable-connect-half-million-new-york-city-households" target="_blank" rel="noopener">2020 settlement</a> Verizon agreed to reach 500,000 more households and every NYCHA building.</p>
-      <p>Today Verizon <a href="https://broadbandmap.fcc.gov/data-download" target="_blank" rel="noopener">claims fiber</a> at <span data-meta="city.verizon_fiber_pct">87%</span> of the city's buildings, but the gaps are not spread evenly. In northern Harlem, at least <span data-meta="story.one_wire_floor_pct">74%</span> of buildings have neither Verizon fiber nor Astound claimed.</p>
+      <p>In the FCC's December 2025 data, Verizon <a href="https://broadbandmap.fcc.gov/data-download" target="_blank" rel="noopener">claims fiber</a> at <span data-meta="city.verizon_fiber_pct">87%</span> of the city's buildings, but the gaps are not spread evenly. In northern Harlem, at least <span data-meta="story.one_wire_floor_pct">74%</span> of buildings have neither Verizon fiber nor Astound claimed.</p>
       <div class="step-key">
-        <p class="key-ramp-label">Share of a block's buildings with no Verizon fiber or Astound claimed</p>
+        <p class="key-ramp-label">Minimum share of a block's buildings with no Verizon fiber or Astound claimed</p>
         <div class="key-ramp"><span class="ramp-bar"></span><span class="ramp-ends"><span>None</span><span>All</span></span></div>
       </div>
     </section>
 
     <section class="step" data-step="3">
       <p class="step-count">4 of 5</p>
-      <h2>Expired, and up for renewal</h2>
+      <h2>Still expired at the end of 2024</h2>
       <p>Optimum's <a href="https://www.nyc.gov/assets/mocs/downloads/Opportunities/FCRC/agendas/may/2016/FCRC_Public_Meeting_Documents-5-11-16.pdf" target="_blank" rel="noopener">agreements</a> for the Bronx and Brooklyn expired on 18 July 2020. At the end of 2024, Altice, Optimum's owner, <a href="https://www.sec.gov/Archives/edgar/data/1702780/000162828025005486/atus-20241231.htm" target="_blank" rel="noopener">told investors</a> the franchise was still expired and that it was operating under temporary state authority.</p>
       <p>A renewal is when the City can set new terms. Cities "often demand concessions or other commitments as a condition to renewal," Altice said in the same filing.</p>
     </section>
@@ -89,11 +92,20 @@
             <p class="key-line"><span><span class="swatch hatch"></span>No Verizon fiber or Astound claimed</span></p>
           </div>
           <div data-key="wire" hidden>
-            <p class="key-ramp-label">Share of a block's buildings with no Verizon fiber or Astound claimed</p>
+            <p class="key-ramp-label">Minimum share of a block's buildings with no Verizon fiber or Astound claimed</p>
             <div class="key-ramp"><span class="ramp-bar"></span><span class="ramp-ends"><span>None</span><span>All</span></span></div>
             <p class="key-line"><span><span class="swatch open"></span>Neither cable company, or open land</span></p>
           </div>
           <p class="key-line"><span><span class="swatch line"></span>Franchise line on the City's map</span></p>
+        </section>
+        <section class="readout">
+          <label class="section-h" for="hood">Go to a neighborhood</label>
+          <div class="combo">
+            <input id="hood" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+              aria-controls="hood-list" autocomplete="off" spellcheck="false" placeholder="Bay Ridge, Harlem, Astoria…" disabled>
+            <!-- [html-validate-disable-next prefer-native-element -- a select cannot filter as you type] -->
+            <ul class="combo-list" id="hood-list" role="listbox" aria-label="Neighborhoods" hidden></ul>
+          </div>
         </section>
         <section class="readout">
           <h3 class="section-h">See a block</h3>
@@ -107,6 +119,7 @@
         </section>
       </div>
       <div id="block" hidden></div>
+      <p class="sr-only" id="say" role="status"></p>
 
       <footer data-chrome="footer" data-compact></footer>
     </section>

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Data · Cable Turf</title>
 <meta name="description" content="Where Cable Turf's claims and franchise lines come from, how a block gets its turf, and what the map leaves out.">
 <link rel="canonical" href="https://cableturf.publicworks.nyc/data.html">
@@ -11,8 +12,8 @@
 <meta property="og:description" content="Where Cable Turf's claims and franchise lines come from, how a block gets its turf, and what the map leaves out.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#fbfaf7">
-<link rel="stylesheet" href="css/site.css?v=20261017b">
-<script src="js/site.js?v=20261017b" defer></script>
+<link rel="stylesheet" href="css/site.css?v=20261101">
+<script src="js/site.js?v=20261101" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the page</a>
@@ -78,7 +79,7 @@
         </tr>
         <tr>
           <td><a href="https://data.cityofnewyork.us/d/9nt8-h7nd">2020 Neighborhood Tabulation Areas</a> (9nt8-h7nd), NYC Department of City Planning</td>
-          <td>The neighborhood named in each block's readout</td>
+          <td>The neighborhood named in each block's readout, and the neighborhood field</td>
           <td>2020</td>
         </tr>
       </tbody>
@@ -90,7 +91,7 @@
     <li><h3>Collect</h3><p>We download the FCC's December 2025 availability files for New York, for cable, fiber and licensed fixed wireless. We also download NYC Planning's 2020 Census blocks and the City's franchise map.</p></li>
     <li><h3>Match</h3><p>We count the buildings each company claims in every block and join the counts to block shapes by their 15-digit block ID. Each block takes the franchise area and the neighborhood that hold its center.</p></li>
     <li><h3>Check</h3><p>We keep the companies that sell wired home service: Spectrum and Optimum cable, Astound, and Verizon fiber. Only claims of home service count, so a building where every claim is business-only drops out. Spectrum's and Optimum's own fiber counts with their cable. Wireless home internet stays in the block file and never counts as a wire.</p></li>
-    <li><h3>Calculate</h3><p>A block is one company's turf when only that company reports cable there, or when it reports at least four times the other's buildings. Otherwise both reach it. Buildings with only the cable company are the block's buildings less those Verizon and Astound claim. The map colors each block by its cable company and hatches it where neither Verizon nor Astound claims any of its buildings. The Other options view shades each block by the share of its buildings that neither claims. A block with fewer than one building per two hectares is drawn as open land, with no company color or hatch. Those blocks are mostly parks, airports and cemeteries; they hold 0.2% of buildings and nearly a third of the land.</p></li>
+    <li><h3>Calculate</h3><p>A block is one company's turf when only that company reports cable there, or when it reports at least four times the other's buildings. Otherwise both reach it. Buildings with only the cable company are at least the block's buildings less those Verizon and Astound claim. The two claims can overlap, so this is a minimum, and it never falls below zero. The map colors each block by its cable company and hatches it where neither Verizon nor Astound claims any of its buildings. The Other options view shades each block by that minimum, as a share of its buildings. A block with fewer than one building per two hectares is drawn as open land, with no company color or hatch. Those blocks are mostly parks, airports and cemeteries; they hold 0.2% of buildings and nearly a third of the land.</p></li>
     <li><h3>Publish</h3><p>We simplify block shapes to about 2.5 meters and write the map file, the CSV and the summary.</p></li>
   </ol>
 

@@ -12,8 +12,8 @@
    takes neither view.
 
    Each step sets the camera, the view and which company stands out. The
-   last step unlocks the map and works as the panel: hover, tap, samples
-   and the view switch. */
+   last step unlocks the map and works as the panel: hover, tap, samples,
+   the neighborhood field, the keyboard cursor and the view switch. */
 
 (function () {
   'use strict';
@@ -316,6 +316,13 @@
     return parts.join(' · ');
   }
 
+  // Markup as one line of plain text for the status line.
+  function plain(html) {
+    var el = document.createElement('div');
+    el.innerHTML = html;
+    return el.textContent.replace(/ · /g, ', ');
+  }
+
   // Sits above the point, or below it near the top edge, and stays inside
   // the map.
   function place(tip, stage, point) {
@@ -386,7 +393,7 @@
   function blockHtml(p, places) {
     var where = p.n >= 0 ? places[p.n] : 'This block';
     var html = '<button type="button" class="back" data-back>← Back</button>' +
-      '<section class="readout"><h3 class="section-h">' + where + '</h3>' +
+      '<section class="readout"><h3 class="section-h" tabindex="-1">' + where + '</h3>' +
       '<p class="holder"><span class="swatch ' + (p.o ? 'open' : SWATCH[p.h]) + '"></span>' + (p.t ? CABLE[p.h] : 'Open land') + '</p>' +
       '<p class="sub">' + (p.t ? fmt(p.t) + (p.t === 1 ? ' building' : ' buildings') + ' on this block' : 'No homes or businesses on this block') + '</p></section>';
     if (!p.t) return html;
@@ -406,14 +413,67 @@
     return html;
   }
 
+  // What the status line says when a block opens. Its heading names the place.
+  function summary(p) {
+    if (!p.t) return 'Open land, with no homes or businesses.';
+    return CABLE[p.h] + ', ' + fmt(p.t) + (p.t === 1 ? ' building. ' : ' buildings. ') + plain(verdict(p));
+  }
+
+  // ---- Neighborhoods ------------------------------------------------
+
+  var HOOD_ROWS = 8;
+
+  function words(s) { return s.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean); }
+
+  function grow(box, c) {
+    if (!box) return [[c[0], c[1]], [c[0], c[1]]];
+    box[0][0] = Math.min(box[0][0], c[0]); box[0][1] = Math.min(box[0][1], c[1]);
+    box[1][0] = Math.max(box[1][0], c[0]); box[1][1] = Math.max(box[1][1], c[1]);
+    return box;
+  }
+
+  // Each 2020 NTA by name, with the bounds of its blocks that have buildings,
+  // or of all its blocks where none does.
+  function neighborhoods(blocks, places) {
+    var box = {};
+    blocks.features.forEach(function (f) {
+      var p = f.properties;
+      if (p.n < 0) return;
+      var b = box[p.n] || (box[p.n] = {});
+      f.geometry.coordinates.forEach(function (poly) {
+        poly[0].forEach(function (c) {
+          b.all = grow(b.all, c);
+          if (p.t) b.built = grow(b.built, c);
+        });
+      });
+    });
+    return Object.keys(box).map(function (n) {
+      return { name: places[n], words: words(places[n]), bounds: box[n].built || box[n].all };
+    }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+  }
+
+  // Every typed word must start a word of the name, so "bed stuy" finds
+  // Bedford-Stuyvesant.
+  function matches(list, q) {
+    var typed = words(q);
+    if (!typed.length) return [];
+    return list.filter(function (h) {
+      return typed.every(function (t) {
+        return h.words.some(function (w) { return w.indexOf(t) === 0; });
+      });
+    });
+  }
+
   // ---- Story --------------------------------------------------------
 
   // The active step is the last one whose top has passed a trigger line:
   // just past the middle when wide, low on the screen when the map sits on
   // top. Only the live step takes hover, taps and map gestures.
-  function story(map, places) {
+  function story(map, places, blocks) {
     var steps = [].slice.call(document.querySelectorAll('.step'));
     var stage = map.getContainer();
+    var canvas = map.getCanvas();
+    var status = document.getElementById('say');
     var tip = document.getElementById('tip');
     var cityPane = document.getElementById('city');
     var blockPane = document.getElementById('block');
@@ -423,6 +483,7 @@
     var nav = new maplibregl.NavigationControl({ showCompass: false });
     var GESTURES = ['scrollZoom', 'dragPan', 'boxZoom', 'doubleClickZoom', 'keyboard', 'touchZoomRotate'];
     var current = -1, chosen = 'holder', live = false, hovered = null, picked = null;
+    var cursor = false, origin = null, saying = null;
 
     var tags = STEPS.map(function (st) {
       return (st.tags || []).map(function (t) {
@@ -464,7 +525,8 @@
       live = on;
       GESTURES.forEach(function (g) { map[g][on ? 'enable' : 'disable'](); });
       if (on) map.addControl(nav, 'top-right'); else map.removeControl(nav);
-      if (!on) hover(null);
+      canvas.tabIndex = on ? 0 : -1;
+      if (!on) setCursor(false);
     }
 
     function go(i) {
@@ -516,20 +578,50 @@
       picked = null;
     }
 
-    function openBlock(f) {
+    // Repeated calls within a beat say only the last.
+    function say(text) {
+      clearTimeout(saying);
+      status.textContent = '';
+      saying = setTimeout(function () { status.textContent = text; }, 120);
+    }
+
+    // A block opened from a control takes focus to its heading, and Back or
+    // Escape returns focus to that control.
+    function openBlock(f, from) {
       unpick();
       picked = f.id;
       map.setFeatureState({ source: 'blocks', id: f.id }, { picked: true });
       blockPane.innerHTML = blockHtml(f.properties, places);
       cityPane.hidden = true;
       blockPane.hidden = false;
+      origin = from || null;
+      if (from) blockPane.querySelector('h3').focus();
+      say(summary(f.properties));
     }
 
     function closeBlock() {
       if (blockPane.hidden) return;
+      var inside = blockPane.contains(document.activeElement);
       unpick();
       blockPane.hidden = true;
       cityPane.hidden = false;
+      var back = origin;
+      origin = null;
+      if (back) back.focus();
+      else if (inside) document.getElementById('find').focus();
+      if (back === canvas) { setCursor(true); describe(); }
+    }
+
+    // A jump ends at once, so its block query waits for the new tiles.
+    function fly(to, then) {
+      if (reduce.matches) {
+        map.jumpTo(to);
+        map.once('idle', then);
+        map.triggerRepaint();
+      } else {
+        map.flyTo(Object.assign({ duration: 1800, curve: 1.2, easing: ease }, to));
+        map.once('moveend', then);
+      }
     }
 
     function hover(f, point) {
@@ -575,10 +667,9 @@
       var chip = e.target.closest('[data-sample]');
       if (!chip) return;
       var at = SAMPLES[+chip.getAttribute('data-sample')];
-      map.flyTo({ center: at, zoom: 15.4, duration: reduce.matches ? 0 : 1800, curve: 1.2, easing: ease });
-      map.once('moveend', function () {
+      fly({ center: at, zoom: 15.4 }, function () {
         var f = map.queryRenderedFeatures(map.project(at), { layers: ['turf'] })[0];
-        if (f) openBlock(f);
+        if (f) openBlock(f, chip);
       });
     });
 
@@ -586,7 +677,125 @@
       if (e.key === 'Escape') closeBlock();
     });
 
+    // ---- Keyboard cursor ----
+
+    // While the map has keyboard focus, a crosshair marks its center. The
+    // block under it gets the hover outline and the tooltip, the status line
+    // reads it out after each move, and Enter opens it.
+
+    function setCursor(on) {
+      cursor = on && live;
+      stage.parentNode.classList.toggle('is-cursor', cursor);
+      if (!cursor) hover(null);
+    }
+
+    function centerBlock() {
+      var at = map.project(map.getCenter());
+      return { f: map.queryRenderedFeatures(at, { layers: ['turf'] })[0] || null, at: at };
+    }
+
+    function describe(lead) {
+      var c = centerBlock();
+      hover(c.f, c.at);
+      say((lead || '') + (c.f ? plain(tipHtml(c.f.properties)) : 'No block at the center of the map.'));
+    }
+
+    canvas.addEventListener('focus', function () {
+      setCursor(canvas.matches(':focus-visible'));
+      if (cursor) describe();
+    });
+    canvas.addEventListener('blur', function () { setCursor(false); });
+    canvas.addEventListener('pointerdown', function () { setCursor(false); });
+    canvas.addEventListener('keydown', function (e) {
+      if (!live) return;
+      if (!cursor) setCursor(true);
+      if (e.key !== 'Enter') return;
+      var f = centerBlock().f;
+      if (f) openBlock(f, canvas);
+      else say('No block at the center of the map.');
+    });
+    map.on('moveend', function () { if (cursor) describe(); });
+
+    // ---- Neighborhood field ----
+
+    // A combobox over the 2020 NTA names. Picking one flies the map there
+    // and hands focus to the keyboard cursor.
+
+    var input = document.getElementById('hood');
+    var list = document.getElementById('hood-list');
+    var hoods = neighborhoods(blocks, places), listed = [], active = -1;
+
+    function setActive(k) {
+      active = k;
+      [].forEach.call(list.children, function (li, i) { li.setAttribute('aria-selected', String(i === k)); });
+      if (k < 0) input.removeAttribute('aria-activedescendant');
+      else input.setAttribute('aria-activedescendant', 'hood-' + k);
+    }
+
+    function showList(on) {
+      list.hidden = !on;
+      input.setAttribute('aria-expanded', String(on));
+      setActive(-1);
+    }
+
+    function row(text, k) {
+      var li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.textContent = text;
+      if (k < 0) { li.className = 'none'; li.setAttribute('aria-disabled', 'true'); } else li.id = 'hood-' + k;
+      list.appendChild(li);
+    }
+
+    function fill() {
+      var found = matches(hoods, input.value), typed = words(input.value).length;
+      listed = found.slice(0, HOOD_ROWS);
+      list.textContent = '';
+      listed.forEach(function (h, k) { row(h.name, k); });
+      if (typed && !found.length) row('No neighborhood by that name', -1);
+      showList(list.children.length > 0);
+      if (!typed) return;
+      say(!found.length ? 'No neighborhood by that name.' :
+        found.length + (found.length === 1 ? ' neighborhood' : ' neighborhoods') +
+        (found.length > HOOD_ROWS ? ', first ' + HOOD_ROWS + ' listed.' : '.'));
+    }
+
+    function choose(h) {
+      input.value = h.name;
+      showList(false);
+      fly(map.cameraForBounds(h.bounds, { padding: 24, maxZoom: 15.4 }), function () {
+        if (!live) return;
+        canvas.focus();
+        setCursor(true);
+        describe(h.name + '. ');
+      });
+    }
+
+    input.addEventListener('input', fill);
+    input.addEventListener('blur', function () { showList(false); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter') {
+        e.preventDefault();
+        if (list.hidden) fill();
+        var n = listed.length;
+        if (!n) return;
+        if (e.key === 'Enter') choose(listed[Math.max(active, 0)]);
+        else setActive(e.key === 'ArrowDown' ? (active + 1) % n : (active <= 0 ? n - 1 : active - 1));
+      } else if (e.key === 'Escape') {
+        e.stopPropagation();
+        if (!list.hidden) showList(false); else input.value = '';
+      }
+    });
+
+    // Mousedown would blur the field and close the list before the click.
+    list.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    list.addEventListener('click', function (e) {
+      var li = e.target.closest('li[id]');
+      if (li) choose(listed[+li.id.slice(5)]);
+    });
+    input.disabled = false;
+
     GESTURES.forEach(function (g) { map[g].disable(); });
+    canvas.tabIndex = -1;
     pick();
   }
 
@@ -614,7 +823,9 @@
 
           // Keeps tiles from earlier steps, so a flight back out shows them
           // while the new ones load instead of blank ground.
-          maxTileCacheSize: 600
+          maxTileCacheSize: 600,
+
+          locale: { 'Map.Title': 'Map of Census blocks. Arrow keys move it, plus and minus zoom, and Enter opens the block at the center.' }
         });
       } catch (err) {
         message.textContent = 'This browser could not draw the map. The story beside it states the same findings.';
@@ -627,9 +838,11 @@
         blocks, city,
         new Promise(function (resolve) { map.on('load', resolve); })
       ]).then(function (res) {
-        addLayers(map, decode(res[0]), res[1]);
+        var decoded = decode(res[0]);
+        addLayers(map, decoded, res[1]);
+        map.keyboard.disableRotation();
         addNames(map);
-        story(map, res[0].places || []);
+        story(map, res[0].places || [], decoded);
         map.once('idle', function () { message.remove(); });
       });
     }).catch(function (err) {

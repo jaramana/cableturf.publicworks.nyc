@@ -1,21 +1,20 @@
 # Cable Turf
 
-Cable Turf is an independent [publicworks.nyc](https://publicworks.nyc) map of
-home internet in New York City. It colors each Census block by the cable company
-that serves it, draws the City's cable franchise line on top, and shows where no
-other wired option is claimed. The front page tells this as a five-step story
-over a pinned map, and its last step is the map itself, where tapping a block
-opens its figures. It is published at
-[cableturf.publicworks.nyc](https://cableturf.publicworks.nyc).
+[Cable Turf](https://cableturf.publicworks.nyc) is an independent
+[publicworks.nyc](https://publicworks.nyc) map of home internet in New York City.
+It colors each Census block by the cable company that serves it, draws the City's
+cable franchise line on top, and shows where no other wired option is claimed.
+A five-step story leads to the map, where tapping a block opens its figures.
+On a keyboard, a neighborhood field and the arrow keys reach any block.
 
 ## Data sources
 
 | Source | Used for |
 | --- | --- |
 | [FCC Broadband Data Collection](https://broadbandmap.fcc.gov/data-download), fixed availability files for New York, December 2025, updated 13 October 2026 | Companies and the buildings where each claims home service, by Census block |
-| [NYC Planning 2020 Census Blocks](https://data.cityofnewyork.us/d/wmsu-5muw) (wmsu-5muw) | Block shapes, clipped to the shoreline |
-| [OTI Cable Franchise Areas](https://data.cityofnewyork.us/d/n2h8-q6ag) (n2h8-q6ag), published November 2016 | Each block's franchise holder, the franchise line, and the outline that trims map labels |
-| [NYC Planning 2020 Neighborhood Tabulation Areas](https://data.cityofnewyork.us/d/9nt8-h7nd) (9nt8-h7nd) | The neighborhood named in each block's readout |
+| [NYC Planning 2020 Census Blocks](https://data.cityofnewyork.us/d/wmsu-5muw), `wmsu-5muw` | Block shapes, clipped to the shoreline |
+| [OTI Cable Franchise Areas](https://data.cityofnewyork.us/d/n2h8-q6ag), `n2h8-q6ag`, published November 2016 | Each block's franchise holder, the franchise line, and the outline that trims map labels |
+| [NYC Planning 2020 Neighborhood Tabulation Areas](https://data.cityofnewyork.us/d/9nt8-h7nd), `9nt8-h7nd` | The neighborhood named in each block's readout, and the neighborhood field |
 
 Map labels come from OpenFreeMap's Positron tiles, with OpenStreetMap data.
 
@@ -95,12 +94,13 @@ Change it on every page that loads a file whenever that file changes.
 ## Tools
 
 Data pipeline: Python, standard library only. Website: static HTML, CSS and
-JavaScript with MapLibre GL JS 4.7.1, kept in `docs/vendor/`, and OpenFreeMap's
-Positron labels. The site uses no account system or analytics. Claude was used
-in development.
+JavaScript, served from GitHub Pages, with MapLibre GL JS 4.7.1, kept in
+`docs/vendor/`, and OpenFreeMap's Positron labels. The site uses no account
+system or analytics. Claude was used in development.
 
 ## License and reuse
 
-Code is [BSD 3-Clause licensed](LICENSE). Source data keep their publishers'
-terms. When you reuse a figure, carry the FCC reporting period and say it comes
-from the companies' own claims. The downloads are on the Data page.
+Code is [BSD 3-Clause licensed](LICENSE). Compiled data can be reused with
+attribution; the source data retain their publishers' terms. Carry the FCC
+reporting period when republishing a figure, and say it comes from the
+companies' own claims. The downloads are on the Data page.

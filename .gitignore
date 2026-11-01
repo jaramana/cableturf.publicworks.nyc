@@ -5,17 +5,6 @@ private/
 .claude/
 .Rhistory
 __pycache__/
-
 node_modules/
-tools/audit/reports/
-tools/audit/node_modules
-tools/audit/reports-refinement/
-
-tools/audit/reports-final/
-
-tools/audit/reports-simple/
-
-tools/audit/reports-simple-final/
 _attempt1/
 prototypes/data/
-
