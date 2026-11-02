@@ -56,6 +56,32 @@
   var PORTFOLIO =
     '<p class="portfolio">A <a href="https://publicworks.nyc/">publicworks.nyc</a> project.</p>';
 
+  // On a phone the nav folds behind a menu button. Escape, a tap outside the
+  // masthead, a tap on a link, or a window wide enough to show the nav folds
+  // it again. Open, the page underneath stops scrolling.
+  function menu(head) {
+    var button = head.querySelector('.nav-toggle');
+    var wide = window.matchMedia('(min-width: 40.01rem)');
+    var nav = head.querySelector('.nav');
+    function set(open) {
+      if (open) nav.style.setProperty('--sheet-top', head.getBoundingClientRect().bottom + 'px');
+      button.setAttribute('aria-expanded', String(open));
+      head.classList.toggle('menu-open', open);
+      document.documentElement.classList.toggle('menu-locked', open);
+    }
+    button.addEventListener('click', function () {
+      set(button.getAttribute('aria-expanded') !== 'true');
+    });
+    head.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && head.classList.contains('menu-open')) { set(false); button.focus(); }
+    });
+    document.addEventListener('click', function (e) {
+      if (head.classList.contains('menu-open') && !head.contains(e.target)) set(false);
+    });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+    wide.addEventListener('change', function () { if (wide.matches) set(false); });
+  }
+
   function buildChrome() {
     var here = location.pathname.split('/').pop() || 'index.html';
 
@@ -65,13 +91,22 @@
       head.innerHTML =
         '<div class="wrap masthead-inner">' +
           '<a class="wordmark" href="index.html">Cable Turf</a>' +
-          '<nav class="nav" aria-label="Sections">' +
+          '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">' +
+            '<span class="sr-only">Menu</span>' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+              '<path class="bar-top" d="M4 7h16"/>' +
+              '<path class="bar-mid" d="M4 12h16"/>' +
+              '<path class="bar-bottom" d="M4 17h16"/>' +
+            '</svg>' +
+          '</button>' +
+          '<nav class="nav" id="site-nav" aria-label="Sections">' +
             PAGES.map(function (p) {
               return '<a href="' + p.href + '"' +
                 (p.href === here ? ' aria-current="page"' : '') + '>' + p.nav + '</a>';
             }).join('') +
           '</nav>' +
         '</div>';
+      menu(head);
     }
 
     var foot = document.querySelector('[data-chrome="footer"]');
